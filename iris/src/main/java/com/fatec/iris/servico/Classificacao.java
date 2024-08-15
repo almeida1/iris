@@ -45,7 +45,11 @@ public class Classificacao {
         dataRaw.add(new DenseInstance(1.0, instanceValue1));
         return dataRaw;
     }
-
+    /*
+     * metodo de classificacao de uma instancia 
+     * entrada - instancia a ser classificada e o path do modelo treinado
+     * saida result - resultado da classificacao
+     */
     public String classifiy(Instances insts, String path) {
         String result = "Not classified!!";
         Classifier cls = null;
