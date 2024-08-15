@@ -18,8 +18,14 @@ public class Test {
 	public static void main(String[] args) throws Exception {
 
 		GeradorDoModelo mg = new GeradorDoModelo();
+		/****************************************************************************************************************
+		 * Selecao dos dados
+		 ****************************************************************************************************************/
         //Le as instancias de um arquivo ARFF, CSV, XRFF ...
 		Instances dataset = mg.loadDataset(DATASETPATH);
+		/****************************************************************************************************************
+		 * Preprocessamento e transformacao
+		 ***************************************************************************************************************/
 		//Normaliza todos os valores numéricos no conjunto de dados fornecido (exceto o atributo de classe, se definido)
 		//A normalização de dados é o processo de redimensionar um ou mais atributos para o intervalo de 0 a 1. 
 		//Isso significa que o maior valor para cada atributo é 1 e o menor valor é 0.
@@ -38,19 +44,25 @@ public class Test {
         //carrega as instancias de treino e de teste normalizadas
 		Instances traindataset = new Instances(datasetnor, 0, trainSize);
 		Instances testdataset = new Instances(datasetnor, trainSize, testSize);
-
+		
+		/****************************************************************************************************************
+		 * Mineração de dados - algoritmo selecionado rede neural artificial para classificacao do dataset (supervisionado) 
+		 ****************************************************************************************************************/
 		// build classifier with train dataset
 		MultilayerPerceptron ann = (MultilayerPerceptron) mg.buildClassifier(traindataset);
 
 		// Evaluate classifier with test dataset
 		String evalsummary = mg.evaluateModel(ann, traindataset, testdataset);
 		System.out.println("Evaluation: " + evalsummary);
+		
+		/****************************************************************************************************************
+		 * Base de conhecimento
+		 ***************************************************************************************************************/
 
 		// Save model
 		mg.saveModel(ann, MODElPATH);
 
-		// classifiy a single instance - passa a instancia a ser avaliada e o modelo ja
-		// treinado como parametro
+		// classifiy a single instance - passa a instancia a ser avaliada e o modelo ja treinado como parametro
 		Classificacao cls = new Classificacao();
 		String classname = cls.classifiy(Filter.useFilter(cls.createInstance(1.6, 0.2, 0), filter), MODElPATH);
 		System.out.println(
